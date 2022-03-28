@@ -1,3 +1,5 @@
+# Inkluderes "SOURCES" riktig?
+
 FAMILY := nrf52
 SOURCES := gpio.c main.c uart.c
 

@@ -1,5 +1,8 @@
 #include "uart.h"
 
+// Skrives det til riktig register når jeg velger pinne for TXD?
+// Er det nødvendig 
+
 void uart_init() {
     // Choose RXD as input
     GPIO0->PIN_CNF[6] = 0;
@@ -14,8 +17,8 @@ void uart_init() {
     UART->PSEL_RXD = 6;
 
     // Selecting pin for TXD on port 1
-    UART->PSEL_TXD = (1<<5);
-    UART->PSEL_TXD |= 8;
+    UART->PSEL_TXD = (1<<5);    //0b0000000000000000000000000100000
+    UART->PSEL_TXD |= 8;        //0b0000000000000000000000000101000 
 
     // Initializes baudrate = 9600, compensates for 
     // lack of flow control
@@ -44,7 +47,7 @@ void uart_send(char letter) {
     // Resets transmit ready event/flag 
     UART->EVENTS_TXDRDY = 0;
 
-
+    // Stop sending messages
     UART->TASKS_STOPTX = 1;
 }
 
@@ -58,5 +61,19 @@ char uart_read() {
         // Reads what's stored in the RXD register
         return UART->RXD;
     }
+
+    // Return nothing if no message is received
     return '\0';
+}
+
+void uart_send_str(char **str) {
+    UART->TASKS_STARTTX = 1;
+    char *letter_ptr = *str;
+    while (*letter_ptr != 0)
+    {
+        UART->TXD = *letter_ptr;
+        while (!UART->EVENTS_TXDRDY);
+        UART->EVENTS_TXDRDY = 0;
+        letter_ptr++;
+    }
 }
