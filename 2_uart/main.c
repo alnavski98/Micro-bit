@@ -61,3 +61,17 @@ ssize_t _write(int fd, const void *buf, size_t count) {
     }
     return count;
 }
+
+// Frivillig oppgave
+ssize_t _read(int fd, void *buf, size_t count) {
+    char *str = (char *)(buf);
+    char letter;
+
+    do
+    {
+        letter = uart_read();
+    } while (letter == 0);
+
+    *str = letter;
+    return 1;
+}

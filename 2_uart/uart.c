@@ -67,13 +67,21 @@ char uart_read() {
 }
 
 void uart_send_str(char **str) {
+    // Start sending messages
     UART->TASKS_STARTTX = 1;
+
+    // Stores address of (first) value
     char *letter_ptr = *str;
     while (*letter_ptr != 0)
     {
+        // Stores value in TXD register
         UART->TXD = *letter_ptr;
+
+        // Waits until value has been sent
         while (!UART->EVENTS_TXDRDY);
         UART->EVENTS_TXDRDY = 0;
+
+        // Moves to the next value address
         letter_ptr++;
     }
 }
