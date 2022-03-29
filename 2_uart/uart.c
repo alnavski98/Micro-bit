@@ -2,7 +2,7 @@
 
 // Skrives det til riktig register når jeg velger pinne for TXD?
 // Er det nødvendig 
-
+// Hvorfor settes PSEL_RXD og PSEL_TXD registrene slik det gjøres
 void uart_init() {
     // Choose RXD as input
     GPIO0->PIN_CNF[6] = 0;
@@ -14,11 +14,13 @@ void uart_init() {
     UART->PSEL_CTS = ~0;
 
     // Selecting pin for RXD on port 0
-    UART->PSEL_RXD = 6;
+    //UART->PSEL_RXD = 6;
+    UART->PSEL_RXD = 0x28; // Equivalent to |= 8 | (1<<5) 
 
     // Selecting pin for TXD on port 1
-    UART->PSEL_TXD = (1<<5);    //0b0000000000000000000000000100000
-    UART->PSEL_TXD |= 8;        //0b0000000000000000000000000101000 
+    //UART->PSEL_TXD = (1<<5);    //0b0000000000000000000000000100000
+    //UART->PSEL_TXD |= 8;        //0b0000000000000000000000000101000 
+    UART->PSEL_TXD = 0x06; //Equivalent to = 6
 
     // Initializes baudrate = 9600, compensates for 
     // lack of flow control
@@ -52,6 +54,9 @@ void uart_send(char letter) {
 }
 
 char uart_read() {
+    // To avoid package loss
+    //UART->EVENTS_RXDRDY = 0;
+
     // Checks if message can be received
     if (UART->EVENTS_RXDRDY)
     {
@@ -70,9 +75,9 @@ void uart_send_str(char **str) {
     // Start sending messages
     UART->TASKS_STARTTX = 1;
 
-    // Stores address of (first) value
+    // Stores address of (first) pointer
     char *letter_ptr = *str;
-    while (*letter_ptr != 0)
+    while (*letter_ptr != '\0')
     {
         // Stores value in TXD register
         UART->TXD = *letter_ptr;

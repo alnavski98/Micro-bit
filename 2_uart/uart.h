@@ -4,6 +4,8 @@
 
 #define UART ((NRF_UART_REG*)0x40002000)  //uart base address
 
+// Does the memory-mapped IO look correct? (Especially in terms of reserved bits)
+// For the reserved registers occupying 1 byte is the "[1]" necessary? (for example on 9 and 10) 
 typedef struct {
     volatile uint32_t TASKS_STARTRX;
     volatile uint32_t TASKS_STOPRX;

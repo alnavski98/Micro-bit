@@ -11,8 +11,10 @@
 */
 
 int main() {
-    gpio_init();
     uart_init();
+    gpio_init();
+    
+    iprintf("The average grade in TTK%d was in %d and %d: %c\n\r", 4235, 2019, 2018, 'C');
 
     int sleep = 0;
     while (1)
