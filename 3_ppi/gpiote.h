@@ -1,8 +1,17 @@
 #ifndef GPIOTE_H
 #define GPIOTE_H
 #include <stdint.h>
+#include "gpio.h"
 
 #define GPIOTE ((NRF_GPIOTE_REG*)0x40006000)
+
+#define BTN_A 14
+
+#define LED_ROW1 21 
+#define LED_ROW2 22
+#define LED_ROW3 15
+#define LED_ROW4 24
+#define LED_ROW5 19
 
 typedef struct {
 	// Tasks
@@ -23,5 +32,7 @@ typedef struct {
 	volatile uint32_t RESERVED5[129];
 	volatile uint32_t CONFIG[8];
 } NRF_GPIOTE_REG;
+
+void gpiote_init();
 
 #endif

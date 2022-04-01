@@ -1,6 +1,7 @@
 #ifndef PPI_H
 #define PPI_H
 #include <stdint.h>
+#include "gpiote.h"
 
 #define PPI ((NRF_PPI_REG*)0x4001F000)
 
@@ -30,6 +31,8 @@ typedef struct {
 	volatile uint32_t FORK_TEP[32];
 } NRF_PPI_REG;
 
+void ppi_init();
+
 #endif
 
-void init_PPI();
+
